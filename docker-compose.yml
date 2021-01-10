@@ -1,0 +1,29 @@
+version: "3.7"
+services:
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: association-issue-demo-backend
+    stdin_open: true # correspond to docker run --it
+    tty: true
+    command: bundle exec rails server -b 0.0.0.0
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@postgres:5432
+    volumes:
+      - .:/app
+    tmpfs:
+      - /tmp
+
+  postgres:
+    image: postgres:11.6-alpine
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
+volumes:
+  postgres:
